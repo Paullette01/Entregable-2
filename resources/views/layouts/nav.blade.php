@@ -18,6 +18,7 @@
                 @endguest
                 @auth
                 <a href="{{route('clientes.index')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Clientes</a>
+                <a href="{{route('colaborador.index')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Colaboradores</a>
                 <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Bienvenido {{auth()->user()->name}}</a>
 
                 <form method="POST" action="{{ route('logout') }}">
