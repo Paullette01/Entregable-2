@@ -19,7 +19,7 @@ class ClientesController extends Controller
             'empresa' => 'required',
             'rol' => 'required',
             'nombre' => 'required',
-            'imagen' => 'nullable|image',
+            'imagen' => 'required',
             'employee_id' => 'required',
             'telefono' => 'required',
             'email' => 'required|email',
@@ -28,22 +28,12 @@ class ClientesController extends Controller
             'genero' => 'required',
         ]);
 
-        // Subir imagen si se ha seleccionado
-        if ($request->hasFile('imagen')) {
-            $imagen = $request->file('imagen');
-            $nombreImagen = $imagen->getClientOriginalName();
-            $rutaImagen = public_path('uploads') . '/' . $nombreImagen;
-            $imagen->move(public_path('uploads'), $nombreImagen);
-        } else {
-            $nombreImagen = null;
-        }
-
         // Crear el nuevo cliente
         $cliente = Cliente::create([
             'empresa' => $validatedData['empresa'],
             'rol' => $validatedData['rol'],
             'nombre' => $validatedData['nombre'],
-            'imagen' => $nombreImagen,
+            'imagen' => $validatedData['imagen'],
             'employee_id' => $validatedData['employee_id'],
             'telefono' => $validatedData['telefono'],
             'email' => $validatedData['email'],
@@ -61,6 +51,6 @@ class ClientesController extends Controller
 
         return view('clientes', compact('clientes'));
     }
-    
-    
+
+
 }

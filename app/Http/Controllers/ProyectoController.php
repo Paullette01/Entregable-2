@@ -3,63 +3,54 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Proyecto;
+use App\Models\Proyecto; 
 
-
-class ProyectoController extends Controller{
+class ProyectoController extends Controller
+{
+    public function formulario()
+    {
+        return view('formulario-proyecto');
+    }
 
     public function store(Request $request)
     {
-        // Validación de los datos recibidos desde el formulario
+        // Validar los datos del formulario
         $validatedData = $request->validate([
-            'costo_total' => 'required',
-            'horas_total' => 'required',
-            'fecha_creacion' => 'required',
-            'creador' => 'required',
-            'estado_trabajo' => 'required',
-            'titulo' => 'required',
-            'descripcion' => 'required',
-            'fecha_limite' => 'required',
-            'colaboradores' => 'required|array',
-            'lideres_proyecto' => 'required|array',
-            'tareas' => 'required',
-            'barra_progreso' => 'required',
-            'imagenes' => 'nullable|array',
-            'archivos' => 'nullable|array',
+            'nombre' => 'required',
+            'cliente' => 'required',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date',
+            'tarifa' => 'required',
+            'tipo' => 'required',
+            'prioridad' => 'required',
+            'lider_proyecto' => 'nullable',
+            'lider_equipo' => 'nullable',
+            'equipo' => 'nullable',
+            'miembros_equipo' => 'nullable',
+            'descripcion' => 'nullable',
+            'archivos' => 'nullable',
         ]);
 
-        // Crear un nuevo objeto Proyecto y asignar los valores recibidos desde el formulario
-        $proyecto = new Proyecto();
-        $proyecto->costo_total = $validatedData['costo_total'];
-        $proyecto->horas_total = $validatedData['horas_total'];
-        $proyecto->fecha_creacion = $validatedData['fecha_creacion'];
-        $proyecto->creador = $validatedData['creador'];
-        $proyecto->estado_trabajo = $validatedData['estado_trabajo'];
-        $proyecto->titulo = $validatedData['titulo'];
-        $proyecto->descripcion = $validatedData['descripcion'];
-        $proyecto->fecha_limite = $validatedData['fecha_limite'];
-        $proyecto->tareas = $validatedData['tareas'];
-        $proyecto->barra_progreso = $validatedData['barra_progreso'];
-
-        // Guardar el proyecto en la base de datos
-        $proyecto->save();
-
-        // Asignar colaboradores al proyecto
-        $proyecto->colaboradores()->sync($validatedData['colaboradores']);
-
-        // Asignar líderes de proyecto al proyecto
-        $proyecto->lideresProyecto()->sync($validatedData['lideres_proyecto']);
-
-        // Subir imágenes y archivos, si se proporcionaron
-        if ($request->hasFile('imagenes')) {
-            // Procesar las imágenes subidas
-        }
-
+        // Subir y guardar los archivos relacionados si se han seleccionado
         if ($request->hasFile('archivos')) {
-            // Procesar los archivos subidos
+            $archivos = [];
+            foreach ($request->file('archivos') as $archivo) {
+                $rutaArchivo = $archivo->store('archivos', 'public');
+                $archivos[] = $rutaArchivo;
+            }
+            $validatedData['archivos'] = $archivos;
         }
 
+        // Crear el proyecto en la base de datos
+        Proyecto::create($validatedData);
+
+        return redirect()->route('proyecto.index')->with('success', 'Proyecto creado exitosamente');
+    }
+
+    public function index()
+    {
+        $proyectos = Proyecto::all();
+
+        return view('proyectos', compact('proyectos'));
     }
 }
-
-

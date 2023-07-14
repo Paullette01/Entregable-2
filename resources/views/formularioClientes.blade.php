@@ -1,10 +1,10 @@
 @extends('layouts.footer')
 @extends('layouts.content')
-@extends('layouts.nav') 
+@extends('layouts.nav')
 @extends('layouts.head')
 
 @section('content')
-<form action="{{ route('clientes.store') }}" method="POST" class="max-w-md mx-auto" enctype="multipart/form-data">
+<form id="formulario" action="{{ route('clientes.store') }}" method="POST" class="max-w-md mx-auto" enctype="multipart/form-data">
     @csrf
 
     <div class="mb-4">
@@ -31,13 +31,8 @@
         @enderror
     </div>
 
-    <div class="mb-4">
-        <label for="imagen" class="block mb-2 font-medium">Imagen:</label>
-        <input type="file" id="imagen" name="imagen" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-500 @error('imagen') border-red-500 @enderror">
-        @error('imagen')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-        @enderror
-    </div>
+    <input type="hidden" id="imagen" name="imagen" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-500 @error('imagen') border-red-500 @enderror">
+
 
     <div class="mb-4">
         <label for="employee_id" class="block mb-2 font-medium">ID de empleado:</label>
@@ -90,9 +85,27 @@
             <span class="text-red-500 text-sm">{{ $message }}</span>
         @enderror
     </div>
-
-    <button type="submit" class="block w-full px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600">Guardar</button>
 </form>
+
+<div class="flex items-center flex-col" >
+    <form action ="{{route('imagenes.store')}}"   method="POST" class="dropzone mt-5 flex justify-center items-start flex-col" enctype="multipart/form-data" id="dropzone" >
+        @csrf
+    </form>
+
+    <button id="btnEnviar" style="width: fit-content;" type="submit" class="block w-full px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600">Guardar</button>
+
+</div>
+
+
+
+<script>
+document.getElementById("btnEnviar").addEventListener("click", function(event) {
+event.preventDefault(); // Evita que se realice la acción por defecto del botón (enviar el formulario)
+document.getElementById("formulario").submit(); // Envía el formulario con el id "formularioCrearProducto"
+});
+</script>
+
+
 
 
 

@@ -1,30 +1,30 @@
 <?php 
 
 namespace App\Models;
-use Illuminate\Http\Request;
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Proyecto extends Model
 {
+    use HasFactory;
+
+    protected $table = 'proyectos';
+
     protected $fillable = [
-        'costo_total',
-        'horas_total',
-        'fecha_creacion',
-        'creador',
-        'estado_trabajo',
-        'titulo',
+        'nombre',
+        'cliente',
+        'fecha_inicio',
+        'fecha_fin',
+        'tarifa',
+        'tipo',
+        'prioridad',
+        'lider_proyecto',
+        'lider_equipo',
+        'equipo',
+        'miembros_equipo',
         'descripcion',
-        'fecha_limite',
-        'tareas',
-        'barra_progreso',
+        'archivos',
     ];
-
-    public function colaboradores()
-    {
-        return $this->belongsToMany(Colaborador::class);
-    }
-
-    public function lideresProyecto()
-    {
-        return $this->belongsToMany(Colaborador::class, 'lideres_proyecto', 'proyecto_id', 'colaborador_id');
-    }
 }

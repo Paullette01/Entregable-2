@@ -23,19 +23,9 @@ class ColaboradorController extends Controller
             'fecha_nacimiento' => 'nullable|date',
             'direccion' => 'nullable',
             'genero' => 'nullable',
-            'imagen' => 'nullable|image',
+            'imagen' => 'required',
         ]);
 
-        if ($request->hasFile('imagen')) {
-            $imagen = $request->file('imagen');
-            $nombreImagen = $imagen->getClientOriginalName();
-            $rutaImagen = public_path('uploads') . '/' . $nombreImagen;
-            $imagen->move(public_path('uploads'), $nombreImagen);
-            $validatedData['imagen'] = $nombreImagen;
-        } else {
-            $validatedData['imagen'] = null;
-        }
-    
 
         Colaborador::create($validatedData);
 
